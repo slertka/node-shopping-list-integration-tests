@@ -180,4 +180,23 @@ describe("Recipes", function() {
         })
       })
   })
+
+  // test POST request
+  it('should add an item on POST', function() {
+    const newItem = { name: "hot chocolate", ingredients: ["milk", "chocolate syrup", "cinnamon"]};
+    return chai
+      .request(app)
+      .post('/recipes')
+      .send(newItem)
+      .then(function(res) {
+        expect(res).to.have.status(201);
+        expect(res).to.json;
+        expect(res.body).to.be.a('object');
+        expect(res.body).to.include.keys("id", "name", "ingredients");
+        expect(res.body.id).to.not.equal(null);
+        expect(res.body).to.deep.equal(
+          Object.assign(newItem, { id: res.body.id })
+        )
+      })
+  })
 })
