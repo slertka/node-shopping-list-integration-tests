@@ -199,4 +199,35 @@ describe("Recipes", function() {
         )
       })
   })
+
+  // test PUT request
+  it('should update an item on PUT', function() {
+    const updateData = { name: "updated name", ingredients: ["updated ingredients"]};
+    return chai
+      .request(app)
+      .get('/recipes')
+      .then(function(res) {
+        updateData.id = res.body[0].id;
+        return chai
+          .request(app)
+          .put(`/recipes/${updateData.id}`)
+          .send(updateData);
+      })
+      .then(function(res) {
+        expect(res).to.have.status(204);
+      })
+  })
+
+  // test DELETE request
+  it('should delete an item on DELETE', function() {
+    return chai
+      .request(app)
+      .get('/recipes')
+      .then(function(res) {
+        return chai.request(app).delete(`/recipes/${res.body[0].id}`);
+      })
+      .then(function(res) {
+        expect(res).to.have.status(204);
+      })
+  })
 })
